@@ -1,0 +1,58 @@
+[gd_scene load_steps=10 format=3 uid="uid://c40t7bit36dy5"]
+
+[ext_resource type="Script" uid="uid://crvs8acj0ic06" path="res://tank.gd" id="1_nxogm"]
+[ext_resource type="Shader" uid="uid://bgn3ds0giiqu6" path="res://circle_shader.gdshader" id="2_3253y"]
+[ext_resource type="PackedScene" uid="uid://bxj264gh5y0uf" path="res://bullet.tscn" id="2_u3cyc"]
+[ext_resource type="Shader" uid="uid://bg4eycg28m0gd" path="res://barrel.gdshader" id="3_3253y"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_drvgu"]
+shader = ExtResource("2_3253y")
+shader_parameter/circle_color = Vector4(0, 0.5, 1, 1)
+shader_parameter/radius = 0.453
+shader_parameter/border_thickness = 0.025
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_nxogm"]
+size = Vector2(4, 4)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3253y"]
+radius = 38.0132
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u3cyc"]
+shader = ExtResource("3_3253y")
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_3253y"]
+size = Vector2(3, 3)
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Tank" type="CharacterBody2D" parent="."]
+position = Vector2(71, 50)
+script = ExtResource("1_nxogm")
+bullet_scene = ExtResource("2_u3cyc")
+
+[node name="Body" type="Sprite2D" parent="Tank"]
+material = SubResource("ShaderMaterial_drvgu")
+position = Vector2(1.90735e-06, 0)
+scale = Vector2(20, 19.88)
+texture = SubResource("PlaceholderTexture2D_nxogm")
+
+[node name="Collision" type="CollisionShape2D" parent="Tank"]
+shape = SubResource("CircleShape2D_3253y")
+debug_color = Color(0.94902, 0.0745098, 0.129412, 0.145098)
+
+[node name="Gun" type="Node2D" parent="Tank"]
+position = Vector2(37, 0)
+
+[node name="Barrel" type="Sprite2D" parent="Tank/Gun"]
+z_index = -1
+material = SubResource("ShaderMaterial_u3cyc")
+position = Vector2(3.69549e-06, 0)
+scale = Vector2(25, -9.425)
+texture = SubResource("PlaceholderTexture2D_3253y")
+
+[node name="Muzzle" type="Marker2D" parent="Tank/Gun"]
+position = Vector2(37, -1)
+
+[node name="ReloadTimer" type="Timer" parent="Tank/Gun"]
+
+[connection signal="timeout" from="Tank/Gun/ReloadTimer" to="Tank" method="_on_reload_timer_timeout"]
