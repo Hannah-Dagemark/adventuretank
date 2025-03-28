@@ -1,0 +1,20 @@
+{
+	"Cannon": {
+		"damage": 10,
+		"Spread": 1,
+		"reload_time": 1.5,
+		"knockback_multiplier": 1.0
+	},
+	"MachineGun": {
+		"damage": 6,
+		"spread": 10,
+		"reload_time":0.5,
+		"knockback_multiplier": 0.6
+	},
+	"Spawner": {
+		"damage": 0,
+		"spread": 0,
+		"reload_time": 2.0,
+		"knockback_multiplier": 0.0,
+	}
+}

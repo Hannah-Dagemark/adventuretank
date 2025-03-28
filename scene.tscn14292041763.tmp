@@ -1,11 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://c40t7bit36dy5"]
+[gd_scene load_steps=11 format=3 uid="uid://c40t7bit36dy5"]
 
 [ext_resource type="Script" uid="uid://crvs8acj0ic06" path="res://tank.gd" id="1_nxogm"]
 [ext_resource type="Shader" uid="uid://bgn3ds0giiqu6" path="res://circle_shader.gdshader" id="2_3253y"]
 [ext_resource type="PackedScene" uid="uid://bxj264gh5y0uf" path="res://bullet.tscn" id="2_u3cyc"]
 [ext_resource type="Shader" uid="uid://bg4eycg28m0gd" path="res://barrel.gdshader" id="3_3253y"]
 [ext_resource type="Script" uid="uid://d06xv8j0swvox" path="res://asset_loader.gd" id="5_m7jmp"]
-[ext_resource type="Script" uid="uid://dk3d0k2gv0mh3" path="res://upgrade_manager.gd" id="6_y2354"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_drvgu"]
 shader = ExtResource("2_3253y")
@@ -25,7 +24,7 @@ shader = ExtResource("3_3253y")
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_3253y"]
 size = Vector2(3, 3)
 
-[node name="Scene" type="Node2D"]
+[node name="Node2D" type="Node2D"]
 script = ExtResource("5_m7jmp")
 
 [node name="Tank" type="CharacterBody2D" parent="."]
@@ -60,10 +59,5 @@ position = Vector2(37, -1)
 
 [node name="asset_loader" type="Node" parent="."]
 script = ExtResource("5_m7jmp")
-
-[node name="UI" type="Node" parent="."]
-
-[node name="UpgradeMenu" type="Node" parent="UI"]
-script = ExtResource("6_y2354")
 
 [connection signal="timeout" from="Tank/Gun/ReloadTimer" to="Tank" method="_on_reload_timer_timeout"]

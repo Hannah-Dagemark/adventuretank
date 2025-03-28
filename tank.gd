@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+@onready var upgrade_manager = $"../UI/UpgradeMenu"
+@onready var asset_loader = $"../asset_loader"
 @onready var muzzle = $Gun/Muzzle
 @onready var gun = $Gun
 @onready var reload_timer = $Gun/ReloadTimer
@@ -34,6 +36,7 @@ func fire_bullet():
 	
 	var bullet = bullet_scene.instantiate()
 	bullet.global_position = muzzle.global_position
+	bullet.speed *= upgrade_manager.get_modifier("bullet_speed")
 	bullet.direction = Vector2.RIGHT.rotated(rotation)
 	get_tree().current_scene.add_child(bullet)
 	
@@ -46,12 +49,20 @@ func fire_bullet():
 	
 
 func _ready():
+	if asset_loader.barrel_data.size() > 0:
+		initialize_barrel()
+	else:
+		asset_loader.barrels_loaded.connect(initialize_barrel)
 	if reload_timer == null:
 		print("Error: ReloadTimer is missing!")
 		return
 	reload_timer.wait_time = fire_rate
 	reload_timer.one_shot = true
 	reload_timer.start()
+	
+func initialize_barrel():
+	var stats = asset_loader.get_barrel_stats("Cannon")
+	print(stats)
 	
 func _on_reload_timer_timeout():
 	print("Timer resetting")
@@ -73,7 +84,7 @@ func _process(delta):
 		
 	if move_direction != Vector2.ZERO:
 		move_direction = move_direction.normalized()
-		velocity = velocity.lerp(move_direction * max_speed, acceleration * delta)
+		velocity = velocity.lerp(move_direction * max_speed * upgrade_manager.get_modifier("speed"), acceleration * delta * upgrade_manager.get_modifier("speed"))
 	else:
 		velocity = velocity.lerp(Vector2.ZERO, friction * delta)
 		
