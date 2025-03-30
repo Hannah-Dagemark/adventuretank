@@ -1,6 +1,47 @@
 {
-	"speed": [1.05, 1.1, 1.15, 1.2, 1.25],
-	"reload_speed": [0.95, 0.9, 0.85, 0.8, 0.75],
-	"bullet_speed": [1.05, 1.1, 1.15, 1.2, 1.25],
-	"bullet_damage": [1.1, 1.2, 1.3, 1.4, 1.5]
+	"speed": {
+		"progression": 0.1,
+		"label": "Speed",
+		"desc": "Increases the speed of your tank"
+	},
+	"reload_speed": {
+		"progression": -0.05,
+		"label": "Reload Speed",
+		"desc": "Decreases the time between shots"
+	},
+	"bullet_speed": {
+		"progression": 0.05,
+		"label": "Bullet Speed",
+		"desc": "Increases the speed of fired bullets"
+	},
+	"bullet_damage": {
+		"progression": 0.1,
+		"label": "Bullet Damage",
+		"desc": "Increases the damage dealt by bullets"
+	},
+	"max_health": {
+		"progression": 0.2,
+		"label": "Max Health",
+		"desc": "Increases the total health of your tank"
+	},
+	"armor": {
+		"progression": 0.1,
+		"label": "Armor",
+		"desc": "Reduces damage taken from enemy bullets"
+	},
+	"barrel_spread": {
+		"progression": -0.02,
+		"label": "Barrel Spread",
+		"desc": "Reduces the random spread of bullets"
+	},
+	"recoil": {
+		"progression": -0.1,
+		"label": "Recoil",
+		"desc": "Reduces the knockback effect when firing"
+	},
+	"turn_speed": {
+		"progression": 0.05,
+		"label": "Turn Speed",
+		"desc": "Increases the rate at which your tank rotates"
+	}
 }

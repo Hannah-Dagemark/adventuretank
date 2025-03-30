@@ -1,6 +1,5 @@
 extends CharacterBody2D
 
-@onready var upgrade_manager = $"../UI/UpgradeMenu"
 @onready var asset_loader = $"../asset_loader"
 @onready var muzzle = $Gun/Muzzle
 @onready var gun = $Gun
@@ -21,7 +20,7 @@ extends CharacterBody2D
 var recoil_offset: float = 0.0
 var move_direction = Vector2.ZERO
 
-@export var fire_rate: float = 0.3  # Seconds between shots
+@export var fire_rate: float = 0.75  # Seconds between shots
 var can_fire: bool = true
 
 func _unhandled_input(event):
@@ -30,25 +29,9 @@ func _unhandled_input(event):
 			fire_bullet()
 			can_fire = false  # Prevents rapid spam
 			reload_timer.start()  # Restart timer
-
-func fire_bullet():
-	if muzzle == null or bullet_scene == null: return
-	
-	var bullet = bullet_scene.instantiate()
-	bullet.global_position = muzzle.global_position
-	bullet.speed *= upgrade_manager.get_modifier("bullet_speed")
-	bullet.direction = Vector2.RIGHT.rotated(rotation)
-	get_tree().current_scene.add_child(bullet)
-	
-	recoil_offset = -recoil_strength
-	velocity -= (Vector2.RIGHT.rotated(rotation) * player_recoil_strength )
-	print("mov", move_direction, "vector", (Vector2.RIGHT.rotated(rotation) * player_recoil_strength ))
-	  
-	can_fire = false
-	reload_timer.start(fire_rate)
-	
-
+			
 func _ready():
+	Upgrades.load_upgrades()
 	if asset_loader.barrel_data.size() > 0:
 		initialize_barrel()
 	else:
@@ -60,6 +43,33 @@ func _ready():
 	reload_timer.one_shot = true
 	reload_timer.start()
 	
+func _process(delta):
+	var target_angle = (get_global_mouse_position() - global_position).angle()
+	rotation = lerp_angle(rotation, target_angle, rotation_speed * delta)
+	
+	handle_movement(delta)
+		
+	recoil_offset = move_toward(recoil_offset, 0, recoil_recovery_speed * delta)
+	$Gun.position.x = gun_default_pos + recoil_offset
+
+	move_and_slide()
+	
+func fire_bullet():
+	if muzzle == null or bullet_scene == null: return
+	
+	var bullet = bullet_scene.instantiate()
+	bullet.global_position = muzzle.global_position
+	bullet.speed *= Upgrades.get_modifier("bullet_speed")
+	bullet.direction = Vector2.RIGHT.rotated(rotation)
+	get_tree().current_scene.add_child(bullet)
+	
+	recoil_offset = -recoil_strength
+	velocity -= (Vector2.RIGHT.rotated(rotation) * player_recoil_strength )
+	print("mov", move_direction, "vector", (Vector2.RIGHT.rotated(rotation) * player_recoil_strength ))
+	  
+	can_fire = false
+	reload_timer.start(fire_rate)
+	
 func initialize_barrel():
 	var stats = asset_loader.get_barrel_stats("Cannon")
 	print(stats)
@@ -67,12 +77,13 @@ func initialize_barrel():
 func _on_reload_timer_timeout():
 	print("Timer resetting")
 	can_fire = true
-
-func _process(delta):
-	move_direction = Vector2.ZERO
-	var target_angle = (get_global_mouse_position() - global_position).angle()
-	rotation = lerp_angle(rotation, target_angle, rotation_speed * delta)
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+			fire_bullet()
+			can_fire = false  # Prevents rapid spam
+			reload_timer.start()  # Restart timer
 	
+func handle_movement(delta):
+	move_direction = Vector2.ZERO
 	if Input.is_action_pressed("move_up"):
 		move_direction.y -= 1
 	if Input.is_action_pressed("move_down"):
@@ -84,11 +95,6 @@ func _process(delta):
 		
 	if move_direction != Vector2.ZERO:
 		move_direction = move_direction.normalized()
-		velocity = velocity.lerp(move_direction * max_speed * upgrade_manager.get_modifier("speed"), acceleration * delta * upgrade_manager.get_modifier("speed"))
+		velocity = velocity.lerp(move_direction * max_speed * Upgrades.get_modifier("speed"), acceleration * delta * Upgrades.get_modifier("speed"))
 	else:
 		velocity = velocity.lerp(Vector2.ZERO, friction * delta)
-		
-	recoil_offset = move_toward(recoil_offset, 0, recoil_recovery_speed * delta)
-	$Gun.position.x = gun_default_pos + recoil_offset
-
-	move_and_slide()

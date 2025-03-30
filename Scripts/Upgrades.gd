@@ -1,8 +1,8 @@
 extends Node
 
-var upgrade_levels = {"speed": 0, "reload_speed": 0, "bullet_speed": 0, "bullet_damage": 0,}
+var upgrade_levels = {}
 var upgrade_data = {}
-
+	
 func _ready():
 	load_upgrades()
 	
@@ -11,11 +11,14 @@ func load_upgrades():
 	if file:
 		upgrade_data = JSON.parse_string(file.get_as_text())
 		file.close()
+		for stat in upgrade_data.keys():
+			upgrade_levels[stat] = 0
 		
 func get_modifier(stat: String) -> float:
 	if upgrade_data.has(stat):
-		var level = upgrade_levels[stat]
-		return upgrade_data[stat][level] if level < upgrade_data[stat].size() else 1.0
+		var level = upgrade_levels.get(stat, 0)
+		var progression = upgrade_data[stat].get("progression", 0.0)
+		return 1.0 + (progression * level)
 	return 1.0
 	
 func upgrade_stat(stat: String):

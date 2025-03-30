@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://c40t7bit36dy5"]
+[gd_scene load_steps=12 format=3 uid="uid://c40t7bit36dy5"]
 
 [ext_resource type="Script" uid="uid://crvs8acj0ic06" path="res://Scripts/tank.gd" id="1_nxogm"]
 [ext_resource type="Shader" uid="uid://bgn3ds0giiqu6" path="res://Shaders/circle_shader.gdshader" id="2_3253y"]
@@ -6,7 +6,6 @@
 [ext_resource type="Shader" uid="uid://bg4eycg28m0gd" path="res://Shaders/barrel.gdshader" id="3_3253y"]
 [ext_resource type="Script" uid="uid://d06xv8j0swvox" path="res://Scripts/asset_loader.gd" id="5_m7jmp"]
 [ext_resource type="Script" uid="uid://d1avrjdmssbus" path="res://Scripts/UpgradeMenu.gd" id="6_y2354"]
-[ext_resource type="Script" uid="uid://blfqvfprv47mh" path="res://Scripts/upgrade_trigger.gd" id="7_ni31j"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_drvgu"]
 shader = ExtResource("2_3253y")
@@ -24,12 +23,6 @@ radius = 38.0132
 shader = ExtResource("3_3253y")
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_3253y"]
-size = Vector2(3, 3)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ni31j"]
-shader = ExtResource("3_3253y")
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_xlvrw"]
 size = Vector2(3, 3)
 
 [node name="Scene" type="Node2D"]
@@ -73,28 +66,8 @@ script = ExtResource("5_m7jmp")
 [node name="UpgradeMenu" type="Control" parent="UI"]
 layout_mode = 3
 anchors_preset = 0
-offset_top = 294.0
 offset_right = 40.0
-offset_bottom = 334.0
-scale = Vector2(3.52, 8.81224)
+offset_bottom = 40.0
 script = ExtResource("6_y2354")
-
-[node name="Sprite2D" type="Sprite2D" parent="UI/UpgradeMenu"]
-material = SubResource("ShaderMaterial_ni31j")
-position = Vector2(12.5, 16.9083)
-scale = Vector2(15.9631, 14.8977)
-texture = SubResource("PlaceholderTexture2D_xlvrw")
-
-[node name="UpgradeTrigger" type="Control" parent="UI"]
-layout_mode = 3
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -1.0
-offset_right = 40.0
-offset_bottom = 39.0
-grow_vertical = 0
-scale = Vector2(3.56, -8.76)
-script = ExtResource("7_ni31j")
 
 [connection signal="timeout" from="Tank/Gun/ReloadTimer" to="Tank" method="_on_reload_timer_timeout"]
