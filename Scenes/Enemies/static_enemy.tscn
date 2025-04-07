@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://3pcu1qn8m537"]
 
-[ext_resource type="Script" uid="uid://b80xij3wt8ptt" path="res://Scripts/StaticEnemy.gd" id="1_7yamv"]
+[ext_resource type="Script" uid="uid://b80xij3wt8ptt" path="res://Scripts/static_enemy.gd" id="1_7yamv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w0pnt"]
 size = Vector2(309, 256)
@@ -15,3 +15,10 @@ script = ExtResource("1_7yamv")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(0.5, -3)
 shape = SubResource("RectangleShape2D_w0pnt")
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+offset_left = -140.0
+offset_top = -163.0
+offset_right = 140.0
+offset_bottom = -136.0
+show_percentage = false

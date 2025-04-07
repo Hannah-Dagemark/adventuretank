@@ -21,7 +21,9 @@ var static_enemy_scene = preload("res://Scenes/Enemies/static_enemy.tscn")
 var recoil_offset: float = 0.0
 var move_direction = Vector2.ZERO
 
+#asset_loader stats
 var barrel_stats
+var enemy_stats
 
 @export var fire_rate: float = 0.75  # Seconds between shots
 var can_fire: bool = true
@@ -34,7 +36,7 @@ func _unhandled_input(event):
 			reload_timer.start()  # Restart timer
 	if event is InputEventKey and event.is_action_pressed("spawn_enemy"):
 		var options = ["Hentagon", "Pexagon", "Square", "Triangle"]
-		spawn_static_enemy(options.pick_random(), false)
+		spawn_static_enemy(options.pick_random())
 			
 func _ready():
 	Upgrades.load_upgrades()
@@ -42,6 +44,10 @@ func _ready():
 		initialize_barrel()
 	else:
 		asset_loader.barrels_loaded.connect(initialize_barrel)
+	if asset_loader.enemy_data.size() > 0:
+		initialize_enemies()
+	else:
+		asset_loader.enemies_loaded.connect(initialize_enemies)
 	if reload_timer == null:
 		print("Error: ReloadTimer is missing!")
 		return
@@ -60,11 +66,15 @@ func _process(delta):
 
 	move_and_slide()
 	
-func spawn_static_enemy(type: String, isModded: bool):
+func spawn_static_enemy(type: String):
+	
+	var cur_enemy_stats = enemy_stats[type.to_lower()]
 	
 	var enemy = static_enemy_scene.instantiate()
-	enemy.type = type
-	enemy.sprite_modded = isModded
+	enemy.path = cur_enemy_stats.path
+	enemy.sprite_modded = false
+	enemy.health = cur_enemy_stats.hp
+	enemy.max_health = enemy.health
 	get_tree().current_scene.add_child(enemy)
 	
 func fire_bullet():
@@ -87,6 +97,10 @@ func fire_bullet():
 func initialize_barrel():
 	barrel_stats = asset_loader.get_barrel_stats("Cannon")
 	print(barrel_stats)
+	
+func initialize_enemies():
+	enemy_stats = asset_loader.get_enemy_stats("all")
+	print(enemy_stats)
 	
 func _on_reload_timer_timeout():
 	print("Timer resetting")

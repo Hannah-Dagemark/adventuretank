@@ -1,0 +1,27 @@
+{
+	"static_enemies": {
+		"triangle": {
+			"path": "triangle.png",
+			"scale": 1.0,
+			"hp": 10.0
+		},
+		"square": {
+			"path": "square.png",
+			"scale": 1.5,
+			"hp": 30.0
+		},
+		"hentagon": {
+			"path": "hentagon.png",
+			"scale": 2.0,
+			"hp": 50.0
+		},
+		"pexagon": {
+			"path": "pexagon.png",
+			"scale": 2.5,
+			"hp": 100.0
+		}                                                                                                
+	},
+	"dynamic_enemies": {
+		
+	}
+}

@@ -1,11 +1,31 @@
 extends Node
 
 signal barrels_loaded
+signal enemies_loaded
 
 var barrel_data = {}
+var enemy_data = {}
 
 func _ready():
 	load_barrel_data()
+	load_enemy_data()
+	
+func load_enemy_data():
+	var file = FileAccess.open("res://Json/enemies.json", FileAccess.READ)
+	if file:
+		var content = file.get_as_text()
+		enemy_data = JSON.parse_string(content) if content else {}
+		enemy_data = enemy_data.get("static_enemies", {})
+		file.close()
+		enemies_loaded.emit()
+	else:
+		push_error("Faield to load Enemies JSON")
+	
+func get_enemy_stats(enemy: String) -> Dictionary:
+	if (enemy == "all"):
+		return enemy_data
+	else:
+		return enemy_data.get(enemy, {})
 	
 func load_barrel_data():
 	var file = FileAccess.open("res://Json/barrels.json", FileAccess.READ)
