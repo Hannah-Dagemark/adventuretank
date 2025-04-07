@@ -6,7 +6,8 @@ extends CharacterBody2D
 @onready var reload_timer = $Gun/ReloadTimer
 @onready var gun_default_pos = gun.position.x
 
-@export var bullet_scene: PackedScene
+var bullet_scene = preload("res://Scenes/bullet.tscn")
+var static_enemy_scene = preload("res://Scenes/Enemies/static_enemy.tscn")
 
 @export var max_speed: float = 300.0 # Top speed
 @export var acceleration: float = 2.0 # How fast it speeds up
@@ -20,6 +21,8 @@ extends CharacterBody2D
 var recoil_offset: float = 0.0
 var move_direction = Vector2.ZERO
 
+var barrel_stats
+
 @export var fire_rate: float = 0.75  # Seconds between shots
 var can_fire: bool = true
 
@@ -29,6 +32,9 @@ func _unhandled_input(event):
 			fire_bullet()
 			can_fire = false  # Prevents rapid spam
 			reload_timer.start()  # Restart timer
+	if event is InputEventKey and event.is_action_pressed("spawn_enemy"):
+		var options = ["Hentagon", "Pexagon", "Square", "Triangle"]
+		spawn_static_enemy(options.pick_random(), false)
 			
 func _ready():
 	Upgrades.load_upgrades()
@@ -54,6 +60,13 @@ func _process(delta):
 
 	move_and_slide()
 	
+func spawn_static_enemy(type: String, isModded: bool):
+	
+	var enemy = static_enemy_scene.instantiate()
+	enemy.type = type
+	enemy.sprite_modded = isModded
+	get_tree().current_scene.add_child(enemy)
+	
 func fire_bullet():
 	if muzzle == null or bullet_scene == null: return
 	
@@ -61,18 +74,19 @@ func fire_bullet():
 	bullet.global_position = muzzle.global_position
 	bullet.speed *= Upgrades.get_modifier("bullet_speed")
 	bullet.direction = Vector2.RIGHT.rotated(rotation)
+	bullet.damage = barrel_stats.damage
 	get_tree().current_scene.add_child(bullet)
 	
 	recoil_offset = -recoil_strength
 	velocity -= (Vector2.RIGHT.rotated(rotation) * player_recoil_strength )
 	print("mov", move_direction, "vector", (Vector2.RIGHT.rotated(rotation) * player_recoil_strength ))
-	  
+	 
 	can_fire = false
 	reload_timer.start(fire_rate)
 	
 func initialize_barrel():
-	var stats = asset_loader.get_barrel_stats("Cannon")
-	print(stats)
+	barrel_stats = asset_loader.get_barrel_stats("Cannon")
+	print(barrel_stats)
 	
 func _on_reload_timer_timeout():
 	print("Timer resetting")

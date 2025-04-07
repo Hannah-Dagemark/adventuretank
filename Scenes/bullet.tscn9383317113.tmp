@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=3 uid="uid://bxj264gh5y0uf"]
+
+[ext_resource type="Shader" uid="uid://bgn3ds0giiqu6" path="res://Shaders/circle_shader.gdshader" id="1_v7oki"]
+[ext_resource type="Script" uid="uid://x0xeow3hcs6y" path="res://Scripts/bullet.gd" id="1_v8qja"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v8qja"]
+shader = ExtResource("1_v7oki")
+shader_parameter/circle_color = Vector4(0, 0.5, 1, 1)
+shader_parameter/radius = 0.495
+shader_parameter/border_thickness = 0.0
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_v8qja"]
+size = Vector2(4, 4)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_v7oki"]
+radius = 10.5
+
+[node name="Bullet" type="Node2D"]
+script = ExtResource("1_v8qja")
+
+[node name="Bullet" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_v8qja")
+scale = Vector2(10, 9.849)
+texture = SubResource("PlaceholderTexture2D_v8qja")
+
+[node name="Area2D" type="Area2D" parent="."]
+scale = Vector2(10, 9.849)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+scale = Vector2(0.2, 0.198396)
+shape = SubResource("CircleShape2D_v7oki")
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

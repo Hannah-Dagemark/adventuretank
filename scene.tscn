@@ -1,12 +1,11 @@
-[gd_scene load_steps=15 format=3 uid="uid://c40t7bit36dy5"]
+[gd_scene load_steps=14 format=3 uid="uid://c40t7bit36dy5"]
 
 [ext_resource type="Script" uid="uid://crvs8acj0ic06" path="res://Scripts/tank.gd" id="1_nxogm"]
 [ext_resource type="Shader" uid="uid://bgn3ds0giiqu6" path="res://Shaders/circle_shader.gdshader" id="2_3253y"]
-[ext_resource type="PackedScene" uid="uid://bxj264gh5y0uf" path="res://bullet.tscn" id="2_u3cyc"]
 [ext_resource type="Shader" uid="uid://bg4eycg28m0gd" path="res://Shaders/barrel.gdshader" id="3_3253y"]
 [ext_resource type="Script" uid="uid://d06xv8j0swvox" path="res://Scripts/asset_loader.gd" id="5_m7jmp"]
-[ext_resource type="Script" uid="uid://d1avrjdmssbus" path="res://Scripts/UpgradeMenu.gd" id="6_y2354"]
-[ext_resource type="Script" uid="uid://blfqvfprv47mh" path="res://Scripts/upgrade_trigger.gd" id="7_ni31j"]
+[ext_resource type="Script" uid="uid://d1avrjdmssbus" path="res://Scripts/Upgrades/UpgradeMenu.gd" id="6_y2354"]
+[ext_resource type="Script" uid="uid://blfqvfprv47mh" path="res://Scripts/Upgrades/upgrade_trigger.gd" id="7_ni31j"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_drvgu"]
 shader = ExtResource("2_3253y")
@@ -38,7 +37,6 @@ script = ExtResource("5_m7jmp")
 [node name="Tank" type="CharacterBody2D" parent="."]
 position = Vector2(71, 50)
 script = ExtResource("1_nxogm")
-bullet_scene = ExtResource("2_u3cyc")
 
 [node name="Body" type="Sprite2D" parent="Tank"]
 material = SubResource("ShaderMaterial_drvgu")
